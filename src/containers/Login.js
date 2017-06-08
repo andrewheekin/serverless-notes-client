@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import {
   Button,
   FormGroup,
@@ -12,6 +13,7 @@ import {
 } from 'amazon-cognito-identity-js';
 import './Login.css';
 import config from '../config.js';
+
 
 
 class Login extends Component {
@@ -62,6 +64,7 @@ class Login extends Component {
     try {
       const userToken = await this.login(this.state.username, this.state.password);
       this.props.updateUserToken(userToken);
+      this.props.history.push('/');
     }
     catch(e) {
       alert(e);
@@ -100,4 +103,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);
