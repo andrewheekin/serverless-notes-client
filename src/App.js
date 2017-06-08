@@ -6,6 +6,7 @@ import {
 import {
   Nav,
   Navbar,
+  NavItem
 } from 'react-bootstrap';
 import './App.css';
 import Routes from './Routes';
@@ -13,13 +14,35 @@ import RouteNavItem from './components/RouteNavItem';
 
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      userToken: null,
+    };
+  }
+
+  updateUserToken = (userToken) => {
+    this.setState({
+      userToken: userToken
+    });
+  }
 
   handleNavLink = (event) => {
     event.preventDefault();
     this.props.history.push(event.currentTarget.getAttribute('href'));
   }
 
+  handleLogout = (event) => {
+    this.updateUserToken(null);
+  }
+
   render() {
+    const childProps = {
+      userToken: this.state.userToken,
+      updateUserToken: this.updateUserToken,
+    };
+
     return (
       <div className="App container">
         <Navbar fluid collapseOnSelect>
@@ -31,12 +54,16 @@ class App extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-              <RouteNavItem onClick={this.handleNavLink} href="/signup">Signup</RouteNavItem>
-              <RouteNavItem onClick={this.handleNavLink} href="/login">Login</RouteNavItem>
+              {/* show logout button if user is logged in, otherwise show Signup/Login */}
+              { this.state.userToken
+                ? <NavItem onClick={this.handleLogout}>Logout</NavItem>
+                : [ <RouteNavItem key={1} onClick={this.handleNavLink} href="/signup">Signup</RouteNavItem>,
+                    <RouteNavItem key={2} onClick={this.handleNavLink} href="/login">Login</RouteNavItem> ]
+              }
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        <Routes />
+        <Routes childProps={childProps} />
       </div>
     );
   }
