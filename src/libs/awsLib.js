@@ -1,11 +1,7 @@
 import AWS from 'aws-sdk';
 import config from '../config.js';
 
-export async function invokeApig(
-  { path,
-    method = 'GET',
-    body }, userToken) {
-
+export async function invokeApig({ path, method = 'GET', body }, userToken) {
   const url = `${config.apiGateway.URL}${path}`;
   const headers = {
     Authorization: userToken,
