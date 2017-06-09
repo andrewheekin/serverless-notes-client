@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { Nav, Navbar, NavItem } from 'react-bootstrap';
 import { CognitoUserPool, } from 'amazon-cognito-identity-js';
+import AWS from 'aws-sdk';
 import config from './config.js';
 import Routes from './Routes';
 import RouteNavItem from './components/RouteNavItem';
@@ -35,6 +36,10 @@ class App extends Component {
 
     if (currentUser !== null) {
       currentUser.signOut();
+    }
+
+    if (AWS.config.credentials) {
+      AWS.config.credentials.clearCachedId();
     }
 
     this.updateUserToken(null);
